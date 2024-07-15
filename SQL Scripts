@@ -1,0 +1,86 @@
+CREATE TABLE item
+(
+    id           SERIAL PRIMARY KEY,
+    code         INTEGER      NOT NULL UNIQUE,
+    name         VARCHAR(255) NOT NULL UNIQUE,
+    price        BIGINT       NOT NULL,
+    created_date TIMESTAMP    NOT NULL,
+    deadline     TIMESTAMP
+);
+
+
+INSERT INTO item (code, name, price, created_date, deadline)
+VALUES (1001, 'Item A', 1500, '2024-07-12 10:00:00', '2025-07-12 10:00:00'),
+       (1002, 'Item B', 2500, '2024-07-12 11:00:00', '2025-07-12 11:00:00'),
+       (1003, 'Item C', 3500, '2024-07-12 12:00:00', '2025-07-12 12:00:00'),
+       (1004, 'Item D', 4500, '2024-07-12 13:00:00', '2025-07-12 13:00:00'),
+       (1005, 'Item E', 5500, '2024-07-12 14:00:00', '2025-07-12 14:00:00');
+
+CREATE TABLE warehouse
+(
+    id      SERIAL PRIMARY KEY,
+    code    INTEGER      NOT NULL UNIQUE,
+    name    VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL
+);
+
+INSERT INTO warehouse (code, name, address)
+VALUES (1, 'WH001', '123 Main St, Cityville');
+INSERT INTO warehouse (code, name, address)
+VALUES (2, 'WH002', '456 Elm St, Townsville');
+
+CREATE TABLE shop
+(
+    id      SERIAL PRIMARY KEY,
+    name    VARCHAR(255) NOT NULL,
+    code    VARCHAR(50)  NOT NULL UNIQUE,
+    address VARCHAR(255) NOT NULL
+);
+
+INSERT INTO shop (name, code, address)
+VALUES ('Main Street Shop', 'MSS001', '123 Main St, Anytown'),
+       ('Downtown Boutique', 'DB002', '456 Downtown Ave, Anytown');
+
+
+CREATE TABLE warehouse_item
+(
+    id           SERIAL PRIMARY KEY,
+    warehouse_id BIGINT NOT NULL,
+    item_id      BIGINT NOT NULL,
+    item_count   INT    NOT NULL CHECK (item_count >= 0),
+    FOREIGN KEY (warehouse_id) REFERENCES warehouse (id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES item (id) ON DELETE CASCADE
+);
+
+
+INSERT INTO warehouse_item (warehouse_id, item_id, item_count)
+VALUES (1, 1, 100);
+INSERT INTO warehouse_item (warehouse_id, item_id, item_count)
+VALUES (1, 2, 200);
+INSERT INTO warehouse_item (warehouse_id, item_id, item_count)
+VALUES (2, 1, 150);
+INSERT INTO warehouse_item (warehouse_id, item_id, item_count)
+VALUES (2, 3, 250);
+
+
+
+CREATE TABLE shop_item
+(
+    id           SERIAL PRIMARY KEY,
+    shop_id      BIGINT NOT NULL,
+    item_id      BIGINT NOT NULL,
+    warehouse_id BIGINT NOT NULL,
+    item_count   INT    NOT NULL CHECK (item_count >= 0),
+    FOREIGN KEY (shop_id) REFERENCES shop (id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES item (id) ON DELETE CASCADE,
+    FOREIGN KEY (warehouse_id) REFERENCES warehouse (id) ON DELETE CASCADE
+);
+
+
+INSERT INTO shop_item (shop_id, item_id, warehouse_id, item_count)
+VALUES (1, 1, 1, 10),
+       (1, 2, 1, 5),
+       (2, 2, 2, 8),
+       (2, 3, 2, 12);
+
+
