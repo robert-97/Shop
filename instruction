@@ -1,0 +1,23 @@
+CREATE TABLE item (
+                      id SERIAL PRIMARY KEY,
+                      code INTEGER NOT NULL UNIQUE,
+                      name VARCHAR(255) NOT NULL UNIQUE,
+                      price BIGINT NOT NULL,
+                      created_date TIMESTAMP NOT NULL,
+                      deadline TIMESTAMP
+);
+
+-- Insert 5 items into the item table
+INSERT INTO item (code, name, price, created_date, deadline) VALUES
+                                                                 (1001, 'Item A', 1500, '2024-07-12 10:00:00', '2025-07-12 10:00:00'),
+                                                                 (1002, 'Item B', 2500, '2024-07-12 11:00:00', '2025-07-12 11:00:00'),
+                                                                 (1003, 'Item C', 3500, '2024-07-12 12:00:00', '2025-07-12 12:00:00'),
+                                                                 (1004, 'Item D', 4500, '2024-07-12 13:00:00', '2025-07-12 13:00:00'),
+                                                                 (1005, 'Item E', 5500, '2024-07-12 14:00:00', '2025-07-12 14:00:00');
+
+CREATE TABLE warehouse (
+                           code SERIAL PRIMARY KEY,
+                           name VARCHAR(255) NOT NULL,
+                           address VARCHAR(255) NOT NULL
+);
+
